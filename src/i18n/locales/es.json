@@ -1,0 +1,294 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "close": "Cerrar"
+  },
+  "nav": {
+    "home": "Inicio",
+    "features": "Características",
+    "pricing": "Precios",
+    "contact": "Contacto",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "dashboard": "Panel",
+    "logout": "Cerrar Sesión"
+  },
+  "hero": {
+    "title": "Agentes AI para tu Logística",
+    "subtitle": "Optimiza tus operaciones con inteligencia artificial avanzada. Forecasting preciso y gestión logística automatizada.",
+    "requestDemo": "Solicitar Demo",
+    "getStarted": "Comenzar Gratis"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "register": "Crear Cuenta",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "resetPassword": "Restablecer Contraseña",
+    "rememberMe": "Recordarme",
+    "loginButton": "Iniciar Sesión",
+    "registerButton": "Crear Cuenta",
+    "alreadyHaveAccount": "¿Ya tienes cuenta?",
+    "dontHaveAccount": "¿No tienes cuenta?",
+    "verifyEmail": "Verificar Email",
+    "resendCode": "Reenviar Código",
+    "verificationCode": "Código de Verificación",
+    "verificationCodePlaceholder": "123456",
+    "verificationCodeHelper": "Ingresa el código de 6 dígitos que recibiste por email",
+    "verificationEmailSent": "Hemos enviado un código de 6 dígitos a tu email. Ingrésalo para verificar tu cuenta.",
+    "didntReceiveCode": "¿No recibiste el código?",
+    "emailSent": "Email Enviado",
+    "emailSentDescription": "Hemos enviado un enlace de recuperación a {email}. Revisa tu bandeja de entrada y sigue las instrucciones.",
+    "sendAnotherEmail": "Enviar Otro Email",
+    "backToLogin": "Volver al Login",
+    "sendRecoveryLink": "Enviar Enlace de Recuperación",
+    "resetPasswordDescription": "Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña",
+    "verifyEmailButton": "Verificar Email",
+    "codeRequired": "El código de verificación es requerido",
+    "codeLength": "El código debe tener 6 dígitos",
+    "invalidCode": "Código de verificación inválido",
+    "codeResentSuccess": "Código reenviado exitosamente",
+    "emailRequired": "El email es requerido",
+    "invalidEmail": "Email inválido",
+    "passwordRequired": "La contraseña es requerida"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido",
+    "agents": "Agentes Disponibles",
+    "conversations": "Conversaciones",
+    "users": "Usuarios",
+    "subscription": "Suscripción",
+    "billing": "Facturación",
+    "settings": "Configuración",
+    "agentsDescription": "Interactúa con agentes AI especializados",
+    "conversationsDescription": "Historial de conversaciones",
+    "usersDescription": "Gestionar usuarios del equipo",
+    "subscriptionDescription": "Plan actual y facturación",
+    "settingsDescription": "Configuración de la cuenta",
+    "openChat": "Abrir Chat",
+    "viewHistory": "Ver Historial",
+    "manage": "Gestionar",
+    "viewDetails": "Ver Detalles",
+    "configure": "Configurar"
+  },
+
+  "chat": {
+    "newConversation": "Nueva Conversación",
+    "typeMessage": "Escribe tu mensaje...",
+    "send": "Enviar",
+    "selectAgent": "Seleccionar Agente",
+    "conversationHistory": "Historial de Conversaciones",
+    "selectAgentTitle": "Selecciona un Agente",
+    "selectAgentDescription": "Elige un agente AI de la barra lateral para comenzar a chatear",
+    "noConversations": "No hay conversaciones previas",
+    "startConversation": "Inicia una conversación con"
+  },
+  "features": {
+    "title": "Potencia tu logística con IA",
+    "subtitle": "Herramientas inteligentes para optimizar tus operaciones",
+    "forecasting": {
+      "title": "Forecasting Inteligente",
+      "description": "Predicciones precisas basadas en datos históricos y tendencias del mercado."
+    },
+    "automation": {
+      "title": "Gestión Automatizada", 
+      "description": "Automatiza procesos logísticos complejos con agentes AI especializados."
+    },
+    "realtime": {
+      "title": "Análisis en Tiempo Real",
+      "description": "Monitoreo continuo y alertas inteligentes para tomar decisiones rápidas."
+    }
+  },
+  "cta": {
+    "title": "¿Listo para transformar tu logística?",
+    "subtitle": "Únete a empresas que ya optimizan sus operaciones con Technoagentes",
+    "button": "Comenzar ahora"
+  },
+  "footer": {
+    "title": "Technoagentes",
+    "subtitle": "Plataforma de agentes AI para logística inteligente"
+  },
+  "pricing": {
+    "title": "Planes Diseñados para tu Crecimiento",
+    "subtitle": "Elige el plan perfecto para tu empresa",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "save": "Ahorra 20%",
+    "mostPopular": "Más Popular",
+    "getStarted": "Comenzar",
+    "contactSales": "Contactar Ventas",
+    "starter": {
+      "name": "Starter",
+      "price": "29",
+      "description": "Perfect para pequeñas empresas",
+      "features": [
+        "Hasta 2 usuarios",
+        "1 agente AI activo",
+        "100 consultas/mes",
+        "Soporte por email"
+      ]
+    },
+    "professional": {
+      "name": "Professional", 
+      "price": "99",
+      "description": "Ideal para empresas en crecimiento",
+      "features": [
+        "Hasta 10 usuarios",
+        "2 agentes AI activos",
+        "1,000 consultas/mes",
+        "Soporte prioritario",
+        "Análisis avanzados",
+        "Integraciones API"
+      ]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "Personalizado",
+      "description": "Para grandes organizaciones",
+      "features": [
+        "Usuarios ilimitados",
+        "Todos los agentes AI",
+        "Consultas ilimitadas",
+        "Soporte 24/7",
+        "Implementación dedicada",
+        "SLA garantizado"
+      ]
+    }
+  },
+  "testimonials": {
+    "title": "Empresas que Confían en Nosotros",
+    "subtitle": "Descubre cómo Technoagentes está transformando la logística",
+    "testimonial1": {
+      "text": "Technoagentes redujo nuestros costos logísticos en un 30% y mejoró la precisión de nuestros forecasts significativamente.",
+      "author": "María González",
+      "position": "Directora de Operaciones",
+      "company": "LogiCorp"
+    },
+    "testimonial2": {
+      "text": "La implementación fue increíblemente sencilla. En menos de una semana ya estábamos viendo resultados tangibles.",
+      "author": "Carlos Ruiz",
+      "position": "CEO",
+      "company": "TransGlobal"
+    },
+    "testimonial3": {
+      "text": "Los agentes AI de Technoagentes nos permiten tomar decisiones basadas en datos en tiempo real. Game changer total.",
+      "author": "Ana Martín",
+      "position": "Head of Supply Chain",
+      "company": "MegaDistrib"
+    }
+  },
+  "agents": {
+    "feedo": {
+      "name": "Feedo",
+      "description": "Agente especializado en gestión de datos y alimentación de información. Permite cargar, procesar y estructurar datos para que otros agentes puedan realizar análisis avanzados y generar insights precisos."
+    },
+    "forecaster": {
+      "name": "Forecaster", 
+      "description": "Agente especializado en predicciones y análisis de tendencias. Utiliza algoritmos avanzados para generar forecasts precisos basados en datos históricos y patrones del mercado."
+    },
+    "simulatedResponse": "Hola, soy {agentName}. He recibido tu mensaje: \"{message}\". Esta es una respuesta simulada."
+  },
+  "howItWorks": {
+    "title": "Cómo Funciona",
+    "subtitle": "Tres pasos simples para optimizar tu logística",
+    "step1": {
+      "title": "Conecta tus Datos",
+      "description": "Feedo procesa y estructura tu información logística para análisis avanzados."
+    },
+    "step2": {
+      "title": "Analiza con IA",
+      "description": "Nuestros agentes especializados analizan patrones y generan insights precisos."
+    },
+    "step3": {
+      "title": "Optimiza Operaciones",
+      "description": "Recibe recomendaciones accionables para mejorar tu eficiencia logística."
+    }
+  },
+  "testimonials": {
+    "title": "Lo que Dicen Nuestros Clientes",
+    "subtitle": "Empresas líderes confían en Technoagentes",
+    "testimonial1": {
+      "text": "Technoagentes transformó completamente nuestra gestión logística. Los insights de Forecaster nos ayudaron a reducir costos en un 30%.",
+      "author": "María González",
+      "position": "Directora de Operaciones",
+      "company": "LogiCorp"
+    },
+    "testimonial2": {
+      "text": "La facilidad de uso de Feedo para cargar nuestros datos y obtener análisis inmediatos es impresionante. Ahorro horas cada semana.",
+      "author": "Carlos Ruiz",
+      "position": "Gerente de Supply Chain",
+      "company": "TransGlobal"
+    },
+    "testimonial3": {
+      "text": "El ROI ha sido excepcional. En 6 meses recuperamos la inversión y seguimos optimizando nuestras operaciones.",
+      "author": "Ana Martín",
+      "position": "CEO",
+      "company": "FleetMax"
+    }
+  },
+  "register": {
+    "step1": {
+      "title": "Información de la Empresa",
+      "description": "Cuéntanos sobre tu empresa para personalizar tu experiencia"
+    },
+    "step2": {
+      "title": "Usuario Administrador",
+      "description": "Crea tu cuenta de administrador principal"
+    },
+    "step3": {
+      "title": "Selección de Plan",
+      "description": "Elige el plan que mejor se adapte a tus necesidades"
+    },
+    "step4": {
+      "title": "Información de Pago",
+      "description": "Completa tu información de facturación para activar tu cuenta"
+    },
+    "companyName": "Nombre de la Empresa",
+    "companySize": "Tamaño de la Empresa",
+    "industry": "Industria",
+    "country": "País",
+    "firstName": "Nombre",
+    "lastName": "Apellidos",
+    "phone": "Teléfono",
+    "cardholderName": "Nombre del Titular",
+    "cardNumber": "Número de Tarjeta",
+    "expiryDate": "Fecha de Vencimiento",
+    "cvv": "CVV",
+    "billingAddress": "Dirección de Facturación",
+    "city": "Ciudad",
+    "zipCode": "Código Postal",
+    "selectCompanySize": "Selecciona el tamaño",
+    "selectIndustry": "Selecciona la industria",
+    "passwordHelper": "Mínimo 8 caracteres, incluye mayúsculas, minúsculas y números",
+    "completeRegistration": "Completar Registro",
+    "errors": {
+      "companyNameRequired": "El nombre de la empresa es requerido",
+      "companySizeRequired": "El tamaño de la empresa es requerido",
+      "industryRequired": "La industria es requerida",
+      "countryRequired": "El país es requerido",
+      "firstNameRequired": "El nombre es requerido",
+      "lastNameRequired": "Los apellidos son requeridos",
+      "emailRequired": "El email es requerido",
+      "emailInvalid": "Email inválido",
+      "passwordRequired": "La contraseña es requerida",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "cardNumberRequired": "El número de tarjeta es requerido",
+      "expiryDateRequired": "La fecha de vencimiento es requerida",
+      "cvvRequired": "El CVV es requerido",
+      "cardholderNameRequired": "El nombre del titular es requerido"
+    }
+  }
+}

@@ -1,0 +1,294 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close"
+  },
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Sign Up",
+    "dashboard": "Dashboard",
+    "logout": "Logout"
+  },
+  "hero": {
+    "title": "AI Agents for your Logistics",
+    "subtitle": "Optimize your operations with advanced artificial intelligence. Accurate forecasting and automated logistics management.",
+    "requestDemo": "Request Demo",
+    "getStarted": "Get Started Free"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Create Account",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot your password?",
+    "resetPassword": "Reset Password",
+    "rememberMe": "Remember me",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "verifyEmail": "Verify Email",
+    "resendCode": "Resend Code",
+    "verificationCode": "Verification Code",
+    "verificationCodePlaceholder": "123456",
+    "verificationCodeHelper": "Enter the 6-digit code you received by email",
+    "verificationEmailSent": "We've sent a 6-digit code to your email. Enter it to verify your account.",
+    "didntReceiveCode": "Didn't receive the code?",
+    "emailSent": "Email Sent",
+    "emailSentDescription": "We've sent a recovery link to {email}. Check your inbox and follow the instructions.",
+    "sendAnotherEmail": "Send Another Email",
+    "backToLogin": "Back to Login",
+    "sendRecoveryLink": "Send Recovery Link",
+    "resetPasswordDescription": "Enter your email and we'll send you a link to reset your password",
+    "verifyEmailButton": "Verify Email",
+    "codeRequired": "Verification code is required",
+    "codeLength": "Code must be 6 digits",
+    "invalidCode": "Invalid verification code",
+    "codeResentSuccess": "Code resent successfully",
+    "emailRequired": "Email is required",
+    "invalidEmail": "Invalid email",
+    "passwordRequired": "Password is required"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "agents": "Available Agents",
+    "conversations": "Conversations",
+    "users": "Users",
+    "subscription": "Subscription",
+    "billing": "Billing",
+    "settings": "Settings",
+    "agentsDescription": "Interact with specialized AI agents",
+    "conversationsDescription": "Conversation history",
+    "usersDescription": "Manage team users",
+    "subscriptionDescription": "Current plan and billing",
+    "settingsDescription": "Account configuration",
+    "openChat": "Open Chat",
+    "viewHistory": "View History",
+    "manage": "Manage",
+    "viewDetails": "View Details",
+    "configure": "Configure"
+  },
+
+  "chat": {
+    "newConversation": "New Conversation",
+    "typeMessage": "Type your message...",
+    "send": "Send",
+    "selectAgent": "Select Agent",
+    "conversationHistory": "Conversation History",
+    "selectAgentTitle": "Select an Agent",
+    "selectAgentDescription": "Choose an AI agent from the sidebar to start chatting",
+    "noConversations": "No previous conversations",
+    "startConversation": "Start a conversation with"
+  },
+  "features": {
+    "title": "Power your logistics with AI",
+    "subtitle": "Intelligent tools to optimize your operations",
+    "forecasting": {
+      "title": "Smart Forecasting",
+      "description": "Accurate predictions based on historical data and market trends."
+    },
+    "automation": {
+      "title": "Automated Management",
+      "description": "Automate complex logistics processes with specialized AI agents."
+    },
+    "realtime": {
+      "title": "Real-time Analysis",
+      "description": "Continuous monitoring and intelligent alerts for quick decision making."
+    }
+  },
+  "cta": {
+    "title": "Ready to transform your logistics?",
+    "subtitle": "Join companies already optimizing their operations with Technoagentes",
+    "button": "Get started now"
+  },
+  "footer": {
+    "title": "Technoagentes",
+    "subtitle": "AI agents platform for intelligent logistics"
+  },
+  "pricing": {
+    "title": "Plans Designed for Your Growth",
+    "subtitle": "Choose the perfect plan for your business",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "Save 20%",
+    "mostPopular": "Most Popular",
+    "getStarted": "Get Started",
+    "contactSales": "Contact Sales",
+    "starter": {
+      "name": "Starter",
+      "price": "29",
+      "description": "Perfect for small businesses",
+      "features": [
+        "Up to 2 users",
+        "1 active AI agent",
+        "100 queries/month",
+        "Email support"
+      ]
+    },
+    "professional": {
+      "name": "Professional",
+      "price": "99", 
+      "description": "Ideal for growing companies",
+      "features": [
+        "Up to 10 users",
+        "2 active AI agents",
+        "1,000 queries/month",
+        "Priority support",
+        "Advanced analytics",
+        "API integrations"
+      ]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "Custom",
+      "description": "For large organizations",
+      "features": [
+        "Unlimited users",
+        "All AI agents",
+        "Unlimited queries",
+        "24/7 support",
+        "Dedicated implementation",
+        "Guaranteed SLA"
+      ]
+    }
+  },
+  "testimonials": {
+    "title": "Companies That Trust Us",
+    "subtitle": "Discover how Technoagentes is transforming logistics",
+    "testimonial1": {
+      "text": "Technoagentes reduced our logistics costs by 30% and significantly improved the accuracy of our forecasts.",
+      "author": "Maria González",
+      "position": "Operations Director",
+      "company": "LogiCorp"
+    },
+    "testimonial2": {
+      "text": "The implementation was incredibly simple. In less than a week we were already seeing tangible results.",
+      "author": "Carlos Ruiz",
+      "position": "CEO",
+      "company": "TransGlobal"
+    },
+    "testimonial3": {
+      "text": "Technoagentes' AI agents allow us to make data-driven decisions in real time. Total game changer.",
+      "author": "Ana Martin",
+      "position": "Head of Supply Chain",
+      "company": "MegaDistrib"
+    }
+  },
+  "agents": {
+    "feedo": {
+      "name": "Feedo",
+      "description": "Specialized agent for data management and information feeding. Enables loading, processing, and structuring data so other agents can perform advanced analysis and generate precise insights."
+    },
+    "forecaster": {
+      "name": "Forecaster",
+      "description": "Specialized agent for predictions and trend analysis. Uses advanced algorithms to generate accurate forecasts based on historical data and market patterns."
+    },
+    "simulatedResponse": "Hello, I'm {agentName}. I received your message: \"{message}\". This is a simulated response."
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "Three simple steps to optimize your logistics",
+    "step1": {
+      "title": "Connect Your Data",
+      "description": "Feedo processes and structures your logistics information for advanced analysis."
+    },
+    "step2": {
+      "title": "Analyze with AI",
+      "description": "Our specialized agents analyze patterns and generate precise insights."
+    },
+    "step3": {
+      "title": "Optimize Operations",
+      "description": "Receive actionable recommendations to improve your logistics efficiency."
+    }
+  },
+  "testimonials": {
+    "title": "What Our Clients Say",
+    "subtitle": "Leading companies trust Technoagentes",
+    "testimonial1": {
+      "text": "Technoagentes completely transformed our logistics management. Forecaster's insights helped us reduce costs by 30%.",
+      "author": "Maria González",
+      "position": "Operations Director",
+      "company": "LogiCorp"
+    },
+    "testimonial2": {
+      "text": "The ease of use of Feedo to load our data and get immediate analysis is impressive. I save hours every week.",
+      "author": "Carlos Ruiz",
+      "position": "Supply Chain Manager",
+      "company": "TransGlobal"
+    },
+    "testimonial3": {
+      "text": "The ROI has been exceptional. In 6 months we recovered the investment and continue optimizing our operations.",
+      "author": "Ana Martín",
+      "position": "CEO",
+      "company": "FleetMax"
+    }
+  },
+  "register": {
+    "step1": {
+      "title": "Company Information",
+      "description": "Tell us about your company to personalize your experience"
+    },
+    "step2": {
+      "title": "Administrator User",
+      "description": "Create your main administrator account"
+    },
+    "step3": {
+      "title": "Plan Selection",
+      "description": "Choose the plan that best fits your needs"
+    },
+    "step4": {
+      "title": "Payment Information",
+      "description": "Complete your billing information to activate your account"
+    },
+    "companyName": "Company Name",
+    "companySize": "Company Size",
+    "industry": "Industry",
+    "country": "Country",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone",
+    "cardholderName": "Cardholder Name",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV",
+    "billingAddress": "Billing Address",
+    "city": "City",
+    "zipCode": "ZIP Code",
+    "selectCompanySize": "Select company size",
+    "selectIndustry": "Select industry",
+    "passwordHelper": "Minimum 8 characters, include uppercase, lowercase and numbers",
+    "completeRegistration": "Complete Registration",
+    "errors": {
+      "companyNameRequired": "Company name is required",
+      "companySizeRequired": "Company size is required",
+      "industryRequired": "Industry is required",
+      "countryRequired": "Country is required",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email",
+      "passwordRequired": "Password is required",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordMismatch": "Passwords do not match",
+      "cardNumberRequired": "Card number is required",
+      "expiryDateRequired": "Expiry date is required",
+      "cvvRequired": "CVV is required",
+      "cardholderNameRequired": "Cardholder name is required"
+    }
+  }
+}
