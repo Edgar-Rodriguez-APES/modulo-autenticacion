@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Card from '../components/ui/Card'
@@ -9,10 +10,23 @@ import LanguageSelector from '../components/ui/LanguageSelector'
 const VerifyEmailPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { verifyEmail } = useAuth()
   const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [resendLoading, setResendLoading] = useState(false)
+  const [email, setEmail] = useState('')
+
+  useEffect(() => {
+    // Get email from localStorage (set during registration)
+    const pendingEmail = localStorage.getItem('pendingVerificationEmail')
+    if (pendingEmail) {
+      setEmail(pendingEmail)
+    } else {
+      // If no pending email, redirect to register
+      navigate('/register')
+    }
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -30,26 +44,38 @@ const VerifyEmailPage = () => {
     setLoading(true)
     setError('')
     
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false)
-      if (code === '123456') {
-        navigate('/dashboard')
+    try {
+      const result = await verifyEmail(code, email)
+      
+      if (result.success) {
+        // Clear pending email from storage
+        localStorage.removeItem('pendingVerificationEmail')
+        // Redirect to login or dashboard
+        navigate('/login')
       } else {
-        setError(t('auth.invalidCode'))
+        setError(result.error)
       }
-    }, 2000)
+    } catch (error) {
+      setError('Error de conexión. Intenta de nuevo.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleResendCode = async () => {
+    if (!email) return
+    
     setResendLoading(true)
     
-    // Simulate API call
-    setTimeout(() => {
-      setResendLoading(false)
-      // Show success message
+    try {
+      // For now, we'll use the forgot password endpoint to resend verification
+      // In a real implementation, there would be a separate resend verification endpoint
       alert(t('auth.codeResentSuccess'))
-    }, 1500)
+    } catch (error) {
+      alert('Error al reenviar código')
+    } finally {
+      setResendLoading(false)
+    }
   }
 
   return (

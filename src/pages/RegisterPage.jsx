@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Card from '../components/ui/Card'
@@ -9,6 +10,7 @@ import LanguageSelector from '../components/ui/LanguageSelector'
 const RegisterPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { register } = useAuth()
   const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
@@ -148,12 +150,31 @@ const RegisterPage = () => {
   const handleSubmit = async () => {
     setLoading(true)
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const result = await register(formData)
+      
+      if (result.success) {
+        if (result.requiresVerification) {
+          // Store email for verification page
+          localStorage.setItem('pendingVerificationEmail', result.email)
+          navigate('/verify-email')
+        } else {
+          // Direct login (shouldn't happen with current API)
+          navigate('/dashboard')
+        }
+      } else {
+        // Handle registration errors
+        if (result.details) {
+          setErrors(result.details)
+        } else {
+          setErrors({ general: result.error })
+        }
+      }
+    } catch (error) {
+      setErrors({ general: 'Error de conexión. Intenta de nuevo.' })
+    } finally {
       setLoading(false)
-      // Redirect to verify email or dashboard
-      navigate('/verify-email')
-    }, 2000)
+    }
   }
 
   const renderStep = () => {

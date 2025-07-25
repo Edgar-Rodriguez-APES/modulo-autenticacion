@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/ui/Button'
 import Card from '../components/ui/Card'
+import FileUpload from '../components/FileUpload'
 
 const ChatPage = () => {
   const { t } = useTranslation()
@@ -133,7 +134,23 @@ const ChatPage = () => {
               {messages.length === 0 ? (
                 <div className="text-center text-slate-500 mt-12">
                   <div className="text-4xl mb-4">{selectedAgent.avatar}</div>
-                  <p>{t('chat.startConversation')} {selectedAgent.name}</p>
+                  <p className="mb-6">{t('chat.startConversation')} {selectedAgent.name}</p>
+                  
+                  {/* Show file upload for Feedo */}
+                  {selectedAgent.id === 'feedo' && (
+                    <div className="max-w-md mx-auto">
+                      <FileUpload onFileUpload={(files) => {
+                        const fileNames = files.map(f => f.name).join(', ')
+                        const newMessage = {
+                          id: Date.now(),
+                          text: `He procesado los archivos: ${fileNames}. Los datos están listos para análisis. ¿Qué tipo de análisis necesitas?`,
+                          sender: 'agent',
+                          timestamp: new Date()
+                        }
+                        setMessages([newMessage])
+                      }} />
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-4">

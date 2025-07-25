@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Card from '../components/ui/Card'
@@ -8,6 +9,7 @@ import LanguageSelector from '../components/ui/LanguageSelector'
 
 const ForgotPasswordPage = () => {
   const { t } = useTranslation()
+  const { forgotPassword } = useAuth()
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -29,11 +31,16 @@ const ForgotPasswordPage = () => {
     setLoading(true)
     setError('')
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const result = await forgotPassword(email)
+      
+      // Always show success message for security (as per API documentation)
       setLoading(false)
       setIsSubmitted(true)
-    }, 2000)
+    } catch (error) {
+      setLoading(false)
+      setIsSubmitted(true) // Still show success for security
+    }
   }
 
   if (isSubmitted) {
