@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Button from './ui/Button'
 
-const FileUpload = ({ onFileUpload }) => {
-  const { t } = useTranslation()
+const FileUpload = ({ onFileUpload, compact = false }) => {
   const [dragActive, setDragActive] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState([])
 
@@ -16,31 +15,12 @@ const FileUpload = ({ onFileUpload }) => {
     })
 
     if (validFiles.length > 0) {
-      // Simular procesamiento de archivos
-      const processedFiles = validFiles.map(file => ({
-        id: Date.now() + Math.random(),
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        uploadedAt: new Date(),
-        status: 'processed',
-        preview: generateFilePreview(file)
-      }))
-
-      setUploadedFiles(prev => [...prev, ...processedFiles])
-      
-      // Notificar al componente padre
+      // Notificar al componente padre con los archivos reales para N8N
       if (onFileUpload) {
-        onFileUpload(processedFiles)
+        onFileUpload(validFiles)
       }
-
-      // Simular mensaje de Feedo
-      setTimeout(() => {
-        const message = `He procesado ${validFiles.length} archivo(s): ${validFiles.map(f => f.name).join(', ')}. Los datos están listos para análisis. ¿Qué tipo de análisis te gustaría realizar?`
-        
-        // Aquí podrías integrar con el sistema de chat
-        console.log('Feedo response:', message)
-      }, 1500)
+    } else {
+      console.warn('No valid files selected')
     }
   }
 
@@ -84,7 +64,7 @@ const FileUpload = ({ onFileUpload }) => {
     e.preventDefault()
     e.stopPropagation()
     setDragActive(false)
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFiles(e.dataTransfer.files)
     }
@@ -100,11 +80,40 @@ const FileUpload = ({ onFileUpload }) => {
     setUploadedFiles(prev => prev.filter(file => file.id !== fileId))
   }
 
+  if (compact) {
+    return (
+      <div className="flex items-center space-x-2">
+        <input
+          type="file"
+          multiple
+          accept=".csv,.xlsx,.xls,.json,.txt"
+          onChange={handleFileInput}
+          className="hidden"
+          id="file-upload-compact"
+        />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => document.getElementById('file-upload-compact').click()}
+          className="flex items-center space-x-2"
+        >
+          <span>📎</span>
+          <span>Upload File</span>
+        </Button>
+        <span className="text-xs text-slate-500">
+          CSV, Excel, JSON, TXT (max 10MB)
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
       {/* Upload Area */}
       <div
-        className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+        className={`border-2 border-dashed rounded-lg text-center transition-colors ${
+          compact ? 'p-4' : 'p-8'
+        } ${
           dragActive 
             ? 'border-primary-500 bg-primary-50' 
             : 'border-slate-300 hover:border-slate-400'
@@ -118,16 +127,16 @@ const FileUpload = ({ onFileUpload }) => {
           <div className="text-4xl">📊</div>
           <div>
             <h3 className="text-lg font-medium text-slate-900 mb-2">
-              Sube tus datos para análisis
+              Upload your data for analysis
             </h3>
             <p className="text-sm text-slate-600 mb-4">
-              Arrastra archivos aquí o haz clic para seleccionar
+              Drag files here or click to select
             </p>
             <p className="text-xs text-slate-500">
-              Formatos soportados: CSV, Excel, JSON, TXT (máx. 10MB)
+              Supported formats: CSV, Excel, JSON, TXT (max 10MB)
             </p>
           </div>
-          
+
           <input
             type="file"
             multiple
@@ -136,57 +145,15 @@ const FileUpload = ({ onFileUpload }) => {
             className="hidden"
             id="file-upload"
           />
-          
+
           <Button
             variant="outline"
             onClick={() => document.getElementById('file-upload').click()}
           >
-            Seleccionar Archivos
+            Select Files
           </Button>
         </div>
       </div>
-
-      {/* Uploaded Files List */}
-      {uploadedFiles.length > 0 && (
-        <div className="space-y-3">
-          <h4 className="font-medium text-slate-900">Archivos Procesados:</h4>
-          {uploadedFiles.map((file) => (
-            <div key={file.id} className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center">
-                  <div className="text-2xl mr-3">
-                    {file.preview.type === 'sales' ? '💰' : 
-                     file.preview.type === 'inventory' ? '📦' : '📄'}
-                  </div>
-                  <div>
-                    <h5 className="font-medium text-slate-900">{file.name}</h5>
-                    <p className="text-sm text-slate-600">
-                      {(file.size / 1024).toFixed(1)} KB • {file.preview.records} registros
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => removeFile(file.id)}
-                  className="text-slate-400 hover:text-slate-600"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="bg-white rounded p-3 text-sm">
-                <p className="text-slate-700 mb-2">{file.preview.summary}</p>
-                <div className="flex flex-wrap gap-2">
-                  {file.preview.columns.map((col, index) => (
-                    <span key={index} className="bg-slate-100 px-2 py-1 rounded text-xs">
-                      {col}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   )
 }
