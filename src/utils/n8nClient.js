@@ -2,8 +2,8 @@ import axios from 'axios'
 
 // N8N Endpoints Configuration
 const N8N_CONFIG = {
-  MESSAGES_ENDPOINT: 'https://sebasduque.app.n8n.cloud/webhook-test/cacf2ea9-bd03-4772-aac8-65decab7cc6b',
-  FILES_ENDPOINT: 'https://sebasduque.app.n8n.cloud/webhook-test/ba4f9473-3c18-46f3-a4a9-da9240728f3a',
+  MESSAGES_ENDPOINT: 'https://sebasduque.app.n8n.cloud/webhook/cacf2ea9-bd03-4772-aac8-65decab7cc6b',
+  FILES_ENDPOINT: 'https://sebasduque.app.n8n.cloud/webhook/ba4f9473-3c18-46f3-a4a9-da9240728f3a',
   WEBHOOK_SECRET: 'T3CHN04G3NT3S2025@',
   TIMEOUT: 30000 // 30 seconds for agent processing
 }
