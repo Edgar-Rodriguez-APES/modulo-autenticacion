@@ -324,7 +324,7 @@ export const ChatProvider = ({ children }) => {
 
         // Validate and format agent response
         if (response.data && n8nHelpers.validateAgentResponse(response.data)) {
-          const agentMessage = n8nHelpers.formatAgentResponse(response.data)
+          const agentMessage = n8nHelpers.formatAgentResponse(response.data, agentType)
           
           dispatch({ 
             type: 'ADD_MESSAGE', 
@@ -446,7 +446,7 @@ export const ChatProvider = ({ children }) => {
 
         // Add agent response about file processing
         if (response.data && n8nHelpers.validateAgentResponse(response.data)) {
-          const agentMessage = n8nHelpers.formatAgentResponse(response.data)
+          const agentMessage = n8nHelpers.formatAgentResponse(response.data, agentType)
           
           dispatch({ 
             type: 'ADD_MESSAGE', 
@@ -532,7 +532,7 @@ export const ChatProvider = ({ children }) => {
       const response = await n8nApi.sendCommand(agentType, command, user.user_id, parameters)
       
       if (response.success && response.data && n8nHelpers.validateAgentResponse(response.data)) {
-        const agentMessage = n8nHelpers.formatAgentResponse(response.data)
+        const agentMessage = n8nHelpers.formatAgentResponse(response.data, agentType)
         
         dispatch({ 
           type: 'ADD_MESSAGE', 

@@ -334,6 +334,13 @@ export const n8nApi = {
 export const n8nHelpers = {
   // Validate response from agent
   validateAgentResponse: (response) => {
+    // Handle N8N array response format
+    if (Array.isArray(response) && response.length > 0 && response[0].output) {
+      console.log('✅ N8N array format detected')
+      return true
+    }
+    
+    // Handle standard format
     const requiredFields = ['chatId', 'response', 'type', 'agentType']
     const isValid = requiredFields.every(field => response && response.hasOwnProperty(field))
 
@@ -345,15 +352,28 @@ export const n8nHelpers = {
   },
 
   // Format agent response for UI
-  formatAgentResponse: (response) => {
+  formatAgentResponse: (response, agentType = 'unknown') => {
+    let text = 'No response received'
+    
+    // Handle N8N array format
+    if (Array.isArray(response) && response.length > 0 && response[0].output) {
+      text = response[0].output
+      console.log('🎨 Formatting N8N array response:', response[0].output)
+    } 
+    // Handle standard format
+    else if (response.response) {
+      text = response.response
+      agentType = response.agentType || agentType
+    }
+
     const formatted = {
       id: Date.now(),
-      text: response.response || 'No response received',
+      text: text,
       sender: 'agent',
-      agentType: response.agentType,
-      type: response.type || 'text',
+      agentType: agentType,
+      type: 'text',
       metadata: response.metadata || {},
-      timestamp: new Date(response.timestamp || Date.now())
+      timestamp: new Date()
     }
 
     console.log('🎨 Formatted agent response:', formatted)
