@@ -14,7 +14,7 @@ const n8nClient = axios.create({
   headers: {
     //'Authorization': 'Bearer ',
     'Content-Type': 'application/json',
-    'Feedo-Webhook-Secret': WEBHOOK_SECRET
+    'Feedo-Webhook-Secret': N8N_CONFIG.WEBHOOK_SECRET
   }
 })
 
@@ -22,7 +22,7 @@ const n8nClient = axios.create({
 n8nClient.interceptors.request.use(
   (config) => {
     // Add webhook secret to headers
-    config.headers['Feedo-Webhook-Secret'] = WEBHOOK_SECRET
+    config.headers['Feedo-Webhook-Secret'] = N8N_CONFIG.WEBHOOK_SECRET
     
     // Add timestamp for request tracking
     config.headers['X-Request-Timestamp'] = new Date().toISOString()
@@ -193,7 +193,7 @@ export const n8nApi = {
       const response = await n8nClient.post(N8N_CONFIG.FILES_ENDPOINT, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Feedo-Webhook-Secret': WEBHOOK_SECRET
+          'Feedo-Webhook-Secret': N8N_CONFIG.WEBHOOK_SECRET
         }
       })
       
