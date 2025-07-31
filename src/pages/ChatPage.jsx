@@ -420,7 +420,7 @@ const ChatPage = () => {
                         <div className={`text-xs text-slate-500 mt-1 ${
                           msg.sender === 'user' ? 'text-right' : 'text-left'
                         }`}>
-                          {msg.timestamp.toLocaleTimeString()}
+                          {new Date(msg.timestamp).toLocaleTimeString()}
                         </div>
                       </div>
                     </div>

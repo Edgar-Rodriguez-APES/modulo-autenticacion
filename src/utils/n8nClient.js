@@ -23,17 +23,17 @@ n8nClient.interceptors.request.use(
   (config) => {
     // Add webhook secret to headers
     config.headers['Feedo-Webhook-Secret'] = N8N_CONFIG.WEBHOOK_SECRET
-    
+
     // Add timestamp for request tracking
     config.headers['X-Request-Timestamp'] = new Date().toISOString()
-    
+
     console.log('🚀 N8N Request:', {
       url: config.url,
       method: config.method,
       headers: config.headers,
       timestamp: new Date().toISOString()
     })
-    
+
     return config
   },
   (error) => {
@@ -63,9 +63,9 @@ n8nClient.interceptors.response.use(
       data: error.response?.data,
       timestamp: new Date().toISOString()
     }
-    
+
     console.error('❌ N8N Error:', errorInfo)
-    
+
     // Handle specific N8N errors
     if (error.response?.status === 401) {
       throw new Error('Webhook authentication failed. Check Feedo-Webhook-Secret.')
@@ -76,7 +76,7 @@ n8nClient.interceptors.response.use(
     } else if (error.response?.status >= 500) {
       throw new Error('N8N server error. Please try again later.')
     }
-    
+
     return Promise.reject(error)
   }
 )
@@ -90,7 +90,7 @@ const generateChatId = () => {
 const getChatId = (userId, agentType) => {
   const storageKey = `chatId_${userId}_${agentType}`
   let chatId = localStorage.getItem(storageKey)
-  
+
   if (!chatId) {
     chatId = generateChatId()
     localStorage.setItem(storageKey, chatId)
@@ -98,7 +98,7 @@ const getChatId = (userId, agentType) => {
   } else {
     console.log('♻️ Existing ChatId found:', { userId, agentType, chatId })
   }
-  
+
   return chatId
 }
 
@@ -107,7 +107,7 @@ export const n8nApi = {
   // Send text message to agent
   sendMessage: async (agentType, message, userId, context = {}) => {
     const chatId = getChatId(userId, agentType)
-    
+
     const payload = {
       chatId,
       message,
@@ -117,18 +117,18 @@ export const n8nApi = {
       timestamp: new Date().toISOString(),
       context
     }
-    
+
     console.log('📤 Sending message to agent:', { agentType, message: message.substring(0, 50) + '...', chatId })
-    
+
     try {
       const response = await n8nClient.post(N8N_CONFIG.MESSAGES_ENDPOINT, payload)
-      
+
       console.log('📥 Agent response received:', {
         agentType,
         responseType: response.data?.type,
         chatId: response.data?.chatId
       })
-      
+
       return {
         success: true,
         data: response.data,
@@ -147,7 +147,7 @@ export const n8nApi = {
   // Upload file to agent
   uploadFile: async (agentType, file, userId, context = {}) => {
     const chatId = getChatId(userId, agentType)
-    
+
     // Validate file size (10MB limit)
     const maxSize = 10 * 1024 * 1024 // 10MB in bytes
     if (file.size > maxSize) {
@@ -158,7 +158,7 @@ export const n8nApi = {
         chatId
       }
     }
-    
+
     // Validate file type
     const allowedTypes = ['.csv', '.xlsx', '.xls', '.json', '.txt']
     const fileExtension = '.' + file.name.split('.').pop().toLowerCase()
@@ -170,15 +170,15 @@ export const n8nApi = {
         chatId
       }
     }
-    
-    console.log('📎 Uploading file:', { 
-      fileName: file.name, 
-      size: file.size, 
+
+    console.log('📎 Uploading file:', {
+      fileName: file.name,
+      size: file.size,
       type: fileExtension,
       agentType,
-      chatId 
+      chatId
     })
-    
+
     // Create FormData for file upload
     const formData = new FormData()
     formData.append('file', file)
@@ -188,7 +188,7 @@ export const n8nApi = {
     formData.append('userId', userId)
     formData.append('timestamp', new Date().toISOString())
     formData.append('context', JSON.stringify(context))
-    
+
     try {
       const response = await n8nClient.post(N8N_CONFIG.FILES_ENDPOINT, formData, {
         headers: {
@@ -196,13 +196,13 @@ export const n8nApi = {
           'Feedo-Webhook-Secret': N8N_CONFIG.WEBHOOK_SECRET
         }
       })
-      
+
       console.log('📥 File upload response:', {
         fileName: file.name,
         agentType,
         responseType: response.data?.type
       })
-      
+
       return {
         success: true,
         data: response.data,
@@ -221,7 +221,7 @@ export const n8nApi = {
   // Send command to agent
   sendCommand: async (agentType, command, userId, parameters = {}) => {
     const chatId = getChatId(userId, agentType)
-    
+
     const payload = {
       chatId,
       message: command,
@@ -234,9 +234,9 @@ export const n8nApi = {
         parameters
       }
     }
-    
+
     console.log('⚡ Sending command to agent:', { agentType, command, parameters })
-    
+
     try {
       const response = await n8nClient.post(N8N_CONFIG.MESSAGES_ENDPOINT, payload)
       return {
@@ -257,7 +257,7 @@ export const n8nApi = {
   // Get conversation history (if supported by n8n workflow)
   getConversationHistory: async (agentType, userId) => {
     const chatId = getChatId(userId, agentType)
-    
+
     const payload = {
       chatId,
       message: '/history',
@@ -270,7 +270,7 @@ export const n8nApi = {
         action: 'get_history'
       }
     }
-    
+
     try {
       const response = await n8nClient.post(N8N_CONFIG.MESSAGES_ENDPOINT, payload)
       return {
@@ -298,7 +298,7 @@ export const n8nApi = {
   // Test connection to N8N
   testConnection: async () => {
     console.log('🔍 Testing N8N connection...')
-    
+
     try {
       const testPayload = {
         chatId: 'test_connection',
@@ -309,7 +309,7 @@ export const n8nApi = {
         timestamp: new Date().toISOString(),
         context: { test: true }
       }
-      
+
       const response = await n8nClient.post(N8N_CONFIG.MESSAGES_ENDPOINT, testPayload)
       console.log('✅ N8N connection successful')
       return { success: true, data: response.data }
@@ -317,13 +317,13 @@ export const n8nApi = {
       // Handle specific N8N webhook errors
       if (error.response?.status === 404 && error.response?.data?.message?.includes('not registered')) {
         console.warn('⚠️ N8N webhook in test mode - needs to be activated')
-        return { 
-          success: false, 
+        return {
+          success: false,
           error: 'N8N webhook in test mode. Please activate the workflow in N8N.',
           needsActivation: true
         }
       }
-      
+
       console.error('❌ N8N connection failed:', error.message)
       return { success: false, error: error.message }
     }
@@ -336,11 +336,11 @@ export const n8nHelpers = {
   validateAgentResponse: (response) => {
     const requiredFields = ['chatId', 'response', 'type', 'agentType']
     const isValid = requiredFields.every(field => response && response.hasOwnProperty(field))
-    
+
     if (!isValid) {
       console.warn('⚠️ Invalid agent response structure:', { response, requiredFields })
     }
-    
+
     return isValid
   },
 
@@ -355,20 +355,20 @@ export const n8nHelpers = {
       metadata: response.metadata || {},
       timestamp: new Date(response.timestamp || Date.now())
     }
-    
+
     console.log('🎨 Formatted agent response:', formatted)
     return formatted
   },
 
   // Check if agent is processing
   isProcessing: (response) => {
-    const processing = response.type === 'processing' || 
-                     (response.response && response.response.toLowerCase().includes('procesando'))
-    
+    const processing = response.type === 'processing' ||
+      (response.response && response.response.toLowerCase().includes('procesando'))
+
     if (processing) {
       console.log('⏳ Agent is processing...')
     }
-    
+
     return processing
   },
 
@@ -382,7 +382,7 @@ export const n8nHelpers = {
         summary: response.metadata.summary,
         processedAt: response.timestamp
       }
-      
+
       console.log('📊 File processing results:', results)
       return results
     }
@@ -405,7 +405,7 @@ export const n8nHelpers = {
         capabilities: ['predictions', 'trends', 'forecasting']
       }
     }
-    
+
     return agents[agentType] || null
   }
 }
