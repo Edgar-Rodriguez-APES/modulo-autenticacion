@@ -5,7 +5,7 @@ const getCurrentOrigin = () => {
   if (typeof window !== 'undefined') {
     return window.location.origin
   }
-  return 'https://main.d3ihcnp00feclic.amplifyapp.com' // fallback to production URL
+  return 'https://main.d3lhcnp00fedic.amplifyapp.com' // fallback to production URL
 }
 
 // Create axios instances for different services
