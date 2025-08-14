@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react'
 import { n8nApi, n8nHelpers } from '../utils/n8nClient'
 
 console.log('🔧 Using REAL N8N client for production')
-import { useAuth } from './DevAuthContext'
+import { useAuth } from './AuthContext'
 
 const ChatContext = createContext()
 

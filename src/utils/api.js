@@ -1,16 +1,26 @@
 import axios from 'axios'
 
-// Create axios instance with real API base URL
-const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://api-platform-dev.agentscl.com',
+// Create axios instances for different services
+const authClient = axios.create({
+  baseURL: import.meta.env.VITE_AUTH_BASE_URL || 'https://sus2ukuiqk.execute-api.us-east-1.amazonaws.com/dev/auth',
   timeout: 15000,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
   }
 })
 
-// Request interceptor to add auth token
-apiClient.interceptors.request.use(
+const tenantClient = axios.create({
+  baseURL: import.meta.env.VITE_TENANT_BASE_URL || 'https://f8u12wibf9.execute-api.us-east-1.amazonaws.com/dev/tenant',
+  timeout: 15000,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+})
+
+// Request interceptor to add auth token for tenant client
+tenantClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken')
     if (token) {
@@ -24,124 +34,129 @@ apiClient.interceptors.request.use(
 )
 
 // Response interceptor for error handling and token refresh
-apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config
+const createResponseInterceptor = (client) => {
+  return client.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
-      
-      const refreshToken = localStorage.getItem('refreshToken')
-      if (refreshToken) {
-        try {
-          const response = await apiClient.post('/auth/refresh', {
-            refresh_token: refreshToken
-          })
-          
-          const { access_token, refresh_token: newRefreshToken } = response.data.data
-          localStorage.setItem('accessToken', access_token)
-          localStorage.setItem('refreshToken', newRefreshToken)
-          
-          // Retry original request with new token
-          originalRequest.headers.Authorization = `Bearer ${access_token}`
-          return apiClient(originalRequest)
-        } catch (refreshError) {
-          // Refresh failed, redirect to login
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true
+
+        const refreshToken = localStorage.getItem('refreshToken')
+        if (refreshToken) {
+          try {
+            const response = await authClient.post('/refresh', {
+              refresh_token: refreshToken
+            })
+
+            const { access_token, refresh_token: newRefreshToken } = response.data.data
+            localStorage.setItem('accessToken', access_token)
+            localStorage.setItem('refreshToken', newRefreshToken)
+
+            // Retry original request with new token
+            originalRequest.headers.Authorization = `Bearer ${access_token}`
+            return client(originalRequest)
+          } catch (refreshError) {
+            // Refresh failed, redirect to login
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('refreshToken')
+            window.location.href = '/login'
+          }
+        } else {
+          // No refresh token, redirect to login
           localStorage.removeItem('accessToken')
-          localStorage.removeItem('refreshToken')
           window.location.href = '/login'
         }
-      } else {
-        // No refresh token, redirect to login
-        localStorage.removeItem('accessToken')
-        window.location.href = '/login'
       }
+
+      return Promise.reject(error)
     }
-    
-    return Promise.reject(error)
-  }
-)
+  )
+}
+
+// Apply interceptors to both clients
+createResponseInterceptor(authClient)
+createResponseInterceptor(tenantClient)
 
 // API methods matching the documented endpoints
 export const api = {
   // Authentication endpoints
   auth: {
-    register: (userData) => apiClient.post('/auth/register', {
-      email: userData.email,
-      password: userData.password,
-      name: `${userData.firstName} ${userData.lastName}`,
-      tenant_name: userData.companyName
-    }),
-    login: (credentials) => apiClient.post('/auth/login', {
+    register: (userData) => {
+      // First register tenant, then user
+      return tenantClient.post('/register', {
+        company_name: userData.companyName,
+        industry: userData.industry || 'technology',
+        company_size: userData.companySize || 'small',
+        country: userData.country || 'Colombia'
+      }).then(tenantResponse => {
+        // Then register user with tenant_id
+        return authClient.post('/register', {
+          tenant_id: tenantResponse.data.data.tenant.tenant_id,
+          email: userData.email,
+          password: userData.password,
+          name: `${userData.firstName} ${userData.lastName}`,
+          role: 'MASTER'
+        })
+      })
+    },
+    login: (credentials) => authClient.post('/login', {
       email: credentials.email,
       password: credentials.password
     }),
-    logout: () => apiClient.post('/auth/logout'),
-    refresh: (refreshToken) => apiClient.post('/auth/refresh', {
+    logout: () => authClient.post('/logout'),
+    refresh: (refreshToken) => authClient.post('/refresh', {
       refresh_token: refreshToken
     }),
-    verifyEmail: (token, email) => apiClient.post('/auth/verify-email', {
-      token,
+    verifyEmail: (verificationToken) => authClient.post('/verify-email', {
+      verification_token: verificationToken
+    }),
+    forgotPassword: (email) => authClient.post('/forgot-password', {
       email
     }),
-    forgotPassword: (email) => apiClient.post('/auth/forgot-password', {
-      email
-    }),
-    resetPassword: (token, newPassword, confirmPassword) => apiClient.post('/auth/reset-password', {
+    resetPassword: (token, newPassword) => authClient.post('/reset-password', {
       token,
-      new_password: newPassword,
-      confirm_password: confirmPassword
+      new_password: newPassword
     })
   },
 
   // Tenant management endpoints
   tenant: {
-    getProfile: () => apiClient.get('/tenant/profile'),
-    updateSettings: (settings) => apiClient.put('/tenant/settings', {
-      settings
-    }),
-    inviteUser: (email, name, role) => apiClient.post('/tenant/invite-user', {
+    getProfile: () => tenantClient.get('/profile'),
+    updateSettings: (settings) => tenantClient.put('/settings', settings),
+    inviteUser: (email, firstName, lastName, role) => tenantClient.post('/invite', {
       email,
-      name,
-      role
+      first_name: firstName,
+      last_name: lastName,
+      role,
+      send_email: true
     }),
-    acceptInvitation: (token, password) => apiClient.post('/tenant/accept-invitation', {
-      token,
-      password
+    acceptInvitation: (token, password, firstName, lastName) => tenantClient.post('/invitation/accept', {
+      invitation_token: token,
+      password,
+      first_name: firstName,
+      last_name: lastName
     }),
     getUsers: (params = {}) => {
       const queryParams = new URLSearchParams()
       if (params.page) queryParams.append('page', params.page)
-      if (params.limit) queryParams.append('limit', params.limit)
+      if (params.page_size) queryParams.append('page_size', params.page_size)
       if (params.role) queryParams.append('role', params.role)
       if (params.status) queryParams.append('status', params.status)
-      
-      const queryString = queryParams.toString()
-      return apiClient.get(`/tenant/users${queryString ? `?${queryString}` : ''}`)
-    }
-  },
 
-  // Payment system endpoints
-  payment: {
-    getPlans: (activeOnly = true) => {
-      const queryParams = activeOnly ? '?active_only=true' : ''
-      return apiClient.get(`/payment/plans${queryParams}`)
+      const queryString = queryParams.toString()
+      return tenantClient.get(`/users${queryString ? `?${queryString}` : ''}`)
     },
-    getPlan: (planId) => apiClient.get(`/payment/plans/${planId}`),
-    createSubscription: (planId, billingInterval, paymentMethod, trialDays = 0) => 
-      apiClient.post('/payment/subscriptions', {
-        plan_id: planId,
-        billing_interval: billingInterval,
-        payment_method: paymentMethod,
-        trial_days: trialDays
-      }),
-    getSubscription: () => apiClient.get('/payment/subscription'),
-    cancelSubscription: (cancelAtPeriodEnd = true, reason = null) => 
-      apiClient.post('/payment/subscription/cancel', {
-        cancel_at_period_end: cancelAtPeriodEnd,
-        reason
-      })
+    getUsageStats: (params = {}) => {
+      const queryParams = new URLSearchParams()
+      if (params.period) queryParams.append('period', params.period)
+      if (params.include_details) queryParams.append('include_details', params.include_details)
+      if (params.metric_type) queryParams.append('metric_type', params.metric_type)
+
+      const queryString = queryParams.toString()
+      return tenantClient.get(`/usage${queryString ? `?${queryString}` : ''}`)
+    }
   }
 }
 
@@ -192,7 +207,7 @@ export const handleApiError = (error) => {
         status: 400,
         type: 'validation'
       }
-    
+
     case 401:
       return {
         code: 'UNAUTHORIZED',
@@ -201,7 +216,7 @@ export const handleApiError = (error) => {
         status: 401,
         type: 'auth'
       }
-    
+
     case 403:
       return {
         code: 'FORBIDDEN',
@@ -210,7 +225,7 @@ export const handleApiError = (error) => {
         status: 403,
         type: 'permission'
       }
-    
+
     case 404:
       return {
         code: 'NOT_FOUND',
@@ -219,7 +234,7 @@ export const handleApiError = (error) => {
         status: 404,
         type: 'not_found'
       }
-    
+
     case 409:
       return {
         code: 'CONFLICT',
@@ -228,7 +243,7 @@ export const handleApiError = (error) => {
         status: 409,
         type: 'conflict'
       }
-    
+
     case 422:
       return {
         code: 'UNPROCESSABLE_ENTITY',
@@ -237,7 +252,7 @@ export const handleApiError = (error) => {
         status: 422,
         type: 'validation'
       }
-    
+
     case 429:
       return {
         code: 'TOO_MANY_REQUESTS',
@@ -246,7 +261,7 @@ export const handleApiError = (error) => {
         status: 429,
         type: 'rate_limit'
       }
-    
+
     case 500:
       return {
         code: 'INTERNAL_SERVER_ERROR',
@@ -255,7 +270,7 @@ export const handleApiError = (error) => {
         status: 500,
         type: 'server'
       }
-    
+
     case 502:
       return {
         code: 'BAD_GATEWAY',
@@ -264,7 +279,7 @@ export const handleApiError = (error) => {
         status: 502,
         type: 'gateway'
       }
-    
+
     case 503:
       return {
         code: 'SERVICE_UNAVAILABLE',
@@ -273,7 +288,7 @@ export const handleApiError = (error) => {
         status: 503,
         type: 'service'
       }
-    
+
     default:
       return {
         code: 'UNKNOWN_ERROR',
@@ -345,4 +360,4 @@ export const getErrorMessage = (error, endpoint = '') => {
   }
 }
 
-export default apiClient
+export default { authClient, tenantClient }

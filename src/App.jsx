@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { DevAuthProvider } from './context/DevAuthContext'
+import { AuthProvider } from './context/AuthContext'
 import { AppProvider } from './context/AppContext'
 import { ChatProvider } from './context/ChatContext'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -30,7 +30,7 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AppProvider>
-          <DevAuthProvider>
+          <AuthProvider>
             <ChatProvider>
               <Router>
                 <div className="min-h-screen bg-white">
@@ -46,7 +46,7 @@ function App() {
                 </div>
               </Router>
             </ChatProvider>
-          </DevAuthProvider>
+          </AuthProvider>
         </AppProvider>
       </QueryClientProvider>
     </ErrorBoundary>
