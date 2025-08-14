@@ -1,5 +1,13 @@
 import axios from 'axios'
 
+// Get the current origin for CORS headers
+const getCurrentOrigin = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin
+  }
+  return 'https://main.d3ihcnp00feclic.amplifyapp.com' // fallback to production URL
+}
+
 // Create axios instances for different services
 const authClient = axios.create({
   baseURL: import.meta.env.VITE_AUTH_BASE_URL || 'https://sus2ukuiqk.execute-api.us-east-1.amazonaws.com/dev/auth',
@@ -18,6 +26,26 @@ const tenantClient = axios.create({
     'Accept': 'application/json'
   }
 })
+
+// Add request interceptor to ensure correct origin
+const addOriginInterceptor = (client) => {
+  client.interceptors.request.use(
+    (config) => {
+      // Only set origin in production to avoid localhost issues
+      if (import.meta.env.PROD) {
+        config.headers['Origin'] = getCurrentOrigin()
+      }
+      return config
+    },
+    (error) => {
+      return Promise.reject(error)
+    }
+  )
+}
+
+// Apply origin interceptor to both clients
+addOriginInterceptor(authClient)
+addOriginInterceptor(tenantClient)
 
 // Request interceptor to add auth token for tenant client
 tenantClient.interceptors.request.use(
