@@ -10,7 +10,7 @@ const getCurrentOrigin = () => {
 
 // Create axios instances for different services
 const authClient = axios.create({
-  baseURL: import.meta.env.VITE_AUTH_BASE_URL || 'https://sus2ukuiqk.execute-api.us-east-1.amazonaws.com/dev/auth',
+  baseURL: import.meta.env.VITE_AUTH_BASE_URL || 'https://api-platform-dev.agentscl.com/auth',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ const authClient = axios.create({
 })
 
 const tenantClient = axios.create({
-  baseURL: import.meta.env.VITE_TENANT_BASE_URL || 'https://f8u12wibf9.execute-api.us-east-1.amazonaws.com/dev/tenant',
+  baseURL: import.meta.env.VITE_TENANT_BASE_URL || 'https://api-platform-dev.agentscl.com/tenant',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
