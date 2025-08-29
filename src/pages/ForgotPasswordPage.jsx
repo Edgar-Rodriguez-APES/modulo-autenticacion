@@ -2,45 +2,81 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useAuthError } from '../hooks/useAuthError'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Card from '../components/ui/Card'
 import LanguageSelector from '../components/ui/LanguageSelector'
+import ErrorDisplay from '../components/ui/ErrorDisplay'
+import NetworkStatus from '../components/ui/NetworkStatus'
+import RateLimitHandler from '../components/ui/RateLimitHandler'
+import ErrorRecovery from '../components/ui/ErrorRecovery'
 
 const ForgotPasswordPage = () => {
   const { t } = useTranslation()
   const { forgotPassword } = useAuth()
+  const { 
+    error, 
+    handleError, 
+    clearError, 
+    retryOperation, 
+    isRetrying,
+    canRetry 
+  } = useAuthError('forgot-password')
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+
+  const performForgotPassword = async () => {
+    const result = await forgotPassword(email)
+    
+    if (result.success) {
+      setIsSubmitted(true)
+      return result
+    } else {
+      // Handle specific error cases
+      if (result.code === 'RATE_LIMIT_EXCEEDED') {
+        const error = new Error(result.error)
+        error.response = {
+          status: result.status || 429,
+          data: { error: { code: result.code, message: result.error } }
+        }
+        throw error
+      } else {
+        // For security, always show success message even if user not found
+        setIsSubmitted(true)
+        return result
+      }
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     
     if (!email) {
-      setError(t('auth.emailRequired'))
+      handleError(new Error('El email es requerido'))
       return
     }
     
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setError(t('auth.invalidEmail'))
+      handleError(new Error('Email inválido'))
       return
     }
 
     setLoading(true)
-    setError('')
+    clearError()
     
     try {
-      const result = await forgotPassword(email)
-      
-      // Always show success message for security (as per API documentation)
-      setLoading(false)
-      setIsSubmitted(true)
+      await performForgotPassword()
     } catch (error) {
+      handleError(error)
+    } finally {
       setLoading(false)
-      setIsSubmitted(true) // Still show success for security
     }
+  }
+
+  const handleRetry = async () => {
+    await retryOperation(performForgotPassword)
   }
 
   if (isSubmitted) {
@@ -61,23 +97,23 @@ const ForgotPasswordPage = () => {
                 </svg>
               </div>
               <h3 className="text-lg font-medium text-slate-900 mb-2">
-                {t('auth.emailSent')}
+                Email Enviado
               </h3>
               <p className="text-sm text-slate-600 mb-6">
-                {t('auth.emailSentDescription', { email })}
+                Si existe una cuenta con el email <strong>{email}</strong>, recibirás un enlace para restablecer tu contraseña en unos minutos.
               </p>
               <div className="space-y-3">
                 <Button
                   className="w-full"
                   onClick={() => setIsSubmitted(false)}
                 >
-                  {t('auth.sendAnotherEmail')}
+                  Enviar otro email
                 </Button>
                 <Link
                   to="/login"
                   className="block text-sm text-primary-600 hover:text-primary-500"
                 >
-                  {t('auth.backToLogin')}
+                  Volver al login
                 </Link>
               </div>
             </div>
@@ -96,24 +132,38 @@ const ForgotPasswordPage = () => {
           </Link>
         </div>
         <h2 className="text-center text-3xl font-bold text-slate-900 mb-2">
-          {t('auth.resetPassword')}
+          Restablecer Contraseña
         </h2>
         <p className="text-center text-sm text-slate-600 mb-8">
-          {t('auth.resetPasswordDescription')}
+          Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña
         </p>
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Card>
+          {/* Network Status */}
+          <NetworkStatus onRetry={handleRetry} className="mb-4" />
+
+          {/* Rate Limit Handler */}
+          <RateLimitHandler 
+            error={error} 
+            onRetry={handleRetry}
+            onDismiss={clearError}
+            className="mb-4"
+          />
+
+          {/* Error Display */}
+          <ErrorDisplay 
+            error={error}
+            onRetry={canRetry ? handleRetry : null}
+            onDismiss={clearError}
+            className="mb-4"
+          />
+
           <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (
-              <div className="bg-danger-50 border border-danger-200 rounded-lg p-3">
-                <p className="text-sm text-danger-600">{error}</p>
-              </div>
-            )}
             
             <Input
-              label={t('auth.email')}
+              label="Email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -124,10 +174,10 @@ const ForgotPasswordPage = () => {
             <Button
               type="submit"
               className="w-full"
-              loading={loading}
-              disabled={loading}
+              loading={loading || isRetrying}
+              disabled={loading || isRetrying}
             >
-              {t('auth.sendRecoveryLink')}
+              {loading || isRetrying ? 'Enviando...' : 'Enviar enlace de recuperación'}
             </Button>
             
             <div className="text-center">
@@ -135,10 +185,19 @@ const ForgotPasswordPage = () => {
                 to="/login"
                 className="text-sm text-primary-600 hover:text-primary-500"
               >
-                ← {t('auth.backToLogin')}
+                ← Volver al login
               </Link>
             </div>
           </form>
+
+          {/* Error Recovery */}
+          <ErrorRecovery 
+            error={error}
+            context="forgot-password"
+            onRetry={canRetry ? handleRetry : null}
+            onDismiss={clearError}
+            className="mt-4"
+          />
         </Card>
         
         <div className="mt-6 flex justify-center">

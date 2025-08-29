@@ -4,16 +4,12 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Button from '../components/ui/Button'
 import Card from '../components/ui/Card'
+import LogoutButton from '../components/LogoutButton'
 
 const DashboardPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { user, logout } = useAuth()
-
-  const handleLogout = () => {
-    logout()
-    navigate('/')
-  }
+  const { user } = useAuth()
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -24,11 +20,9 @@ const DashboardPage = () => {
             <h1 className="text-2xl font-bold text-slate-900">Technoagentes</h1>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-slate-600">
-                {t('dashboard.welcome')}, {user?.name || 'Usuario'}
+                Bienvenido, {user?.name || 'Usuario'}
               </span>
-              <Button variant="outline" onClick={handleLogout}>
-                {t('nav.logout')}
-              </Button>
+              <LogoutButton variant="outline" />
             </div>
           </div>
         </div>

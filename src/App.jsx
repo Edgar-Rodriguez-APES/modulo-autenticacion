@@ -4,14 +4,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from './context/AuthContext'
 import { AppProvider } from './context/AppContext'
 import { ChatProvider } from './context/ChatContext'
-import ErrorBoundary from './components/ErrorBoundary'
+import ErrorBoundary from './components/ui/ErrorBoundary'
 
 // Pages
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
-import VerifyEmailPage from './pages/VerifyEmailPage'
+import { VerifyEmailPage } from './pages/VerifyEmailPage'
 import DashboardPage from './pages/DashboardPage'
 import ChatPage from './pages/ChatPage'
 
