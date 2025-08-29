@@ -109,7 +109,44 @@ const addSecurityInterceptors = (client) => {
 addSecurityInterceptors(authClient)
 addSecurityInterceptors(tenantClient)
 
-// Request interceptor to add auth token and handle automatic refresh for tenant client
+// Request interceptor to add auth token for protected endpoints
+const addAuthTokenInterceptor = (client) => {
+  client.interceptors.request.use(
+    async (config) => {
+      // List of endpoints that require authentication
+      const protectedEndpoints = ['/logout', '/validate-token', '/refresh-token/revoke']
+      const requiresAuth = protectedEndpoints.some(endpoint => config.url?.includes(endpoint))
+      
+      if (requiresAuth) {
+        try {
+          // Import token refresh manager dynamically to avoid circular dependency
+          const { default: tokenRefreshManager } = await import('./tokenRefreshManager.js')
+          
+          // Ensure we have a valid token before making the request
+          const validToken = await tokenRefreshManager.ensureValidToken()
+          
+          if (validToken) {
+            config.headers.Authorization = `Bearer ${validToken}`
+          }
+        } catch (error) {
+          console.warn('Failed to ensure valid token for request:', error)
+          // Fallback to stored token if refresh fails
+          const token = localStorage.getItem('accessToken')
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+          }
+        }
+      }
+      
+      return config
+    },
+    (error) => {
+      return Promise.reject(error)
+    }
+  )
+}
+
+// Request interceptor to add auth token for all tenant client requests
 tenantClient.interceptors.request.use(
   async (config) => {
     try {
@@ -137,6 +174,9 @@ tenantClient.interceptors.request.use(
     return Promise.reject(error)
   }
 )
+
+// Apply auth token interceptor to auth client for protected endpoints
+addAuthTokenInterceptor(authClient)
 
 // Response interceptor for error handling and token refresh
 const createResponseInterceptor = (client) => {
