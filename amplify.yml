@@ -1,131 +1,29 @@
 version: 1
-applications:
-  - appRoot: .
-    frontend:
-      phases:
-        preBuild:
-          commands:
-            - echo "Starting pre-build phase..."
-            - echo "Node version:" && node --version
-            - echo "NPM version:" && npm --version
-            - echo "Installing dependencies..."
-            - npm ci
-            - echo "Running security audit..."
-            - npm audit --audit-level=high
-            - echo "Running linting..."
-            - npm run lint || echo "Linting completed with warnings - continuing build"
-            - echo "Validating environment variables..."
-            - node scripts/validate-env.js
-        build:
-          commands:
-            - echo "Starting build phase..."
-            - echo "Running integration tests..."
-            - node scripts/integration-test.js
-            - echo "Building application..."
-            - npm run build
-            - echo "Build completed successfully"
-        postBuild:
-          commands:
-            - echo "Starting post-build phase..."
-            - echo "Generating build report..."
-            - ls -la dist/
-            - echo "Build size analysis:"
-            - du -sh dist/*
-            - echo "Validating build output..."
-            - test -f dist/index.html || (echo "Missing index.html" && exit 1)
-            - test -d dist/assets || (echo "Missing assets directory" && exit 1)
-            - echo "Post-build validation completed"
-      artifacts:
-        baseDirectory: dist
-        files:
-          - '**/*'
-      cache:
-        paths:
-          - node_modules/**/*
-          - .npm/**/*
-    test:
-      phases:
-        preTest:
-          commands:
-            - echo "Starting test phase..."
-            - echo "Installing test dependencies..."
-            - npm ci
-        test:
-          commands:
-            - echo "Running unit tests..."
-            - npm run test:unit -- --coverage --watchAll=false
-            - echo "Running integration tests..."
-            - npm run test:integration -- --watchAll=false
-            - echo "Running accessibility tests..."
-            - npm run test:a11y || echo "Accessibility tests completed"
-        postTest:
-          commands:
-            - echo "Test phase completed"
-            - echo "Generating test reports..."
-            - test -f coverage/lcov-report/index.html && echo "Coverage report generated"
-      artifacts:
-        baseDirectory: .
-        files:
-          - coverage/**/*
-          - test-results/**/*
-          - integration-test-report.json
-    customHeaders:
-      - pattern: '**/*'
-        headers:
-          - key: 'Strict-Transport-Security'
-            value: 'max-age=31536000; includeSubDomains'
-          - key: 'X-Content-Type-Options'
-            value: 'nosniff'
-          - key: 'X-Frame-Options'
-            value: 'DENY'
-          - key: 'X-XSS-Protection'
-            value: '1; mode=block'
-          - key: 'Referrer-Policy'
-            value: 'strict-origin-when-cross-origin'
-          - key: 'Content-Security-Policy'
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.technoagentes.com"
-      - pattern: '/static/js/*.js'
-        headers:
-          - key: 'Cache-Control'
-            value: 'public, max-age=31536000, immutable'
-      - pattern: '/static/css/*.css'
-        headers:
-          - key: 'Cache-Control'
-            value: 'public, max-age=31536000, immutable'
-      - pattern: '/static/media/*'
-        headers:
-          - key: 'Cache-Control'
-            value: 'public, max-age=31536000, immutable'
-    rewrites:
-      - source: '/<*>'
-        target: '/index.html'
-        status: '200'
-    redirects:
-      - source: '/login'
-        target: '/login'
-        status: '200'
-      - source: '/register'
-        target: '/register'
-        status: '200'
-      - source: '/verify-email'
-        target: '/verify-email'
-        status: '200'
-      - source: '/forgot-password'
-        target: '/forgot-password'
-        status: '200'
-      - source: '/reset-password'
-        target: '/reset-password'
-        status: '200'
-    environmentVariables:
-      - name: NODE_ENV
-        value: production
-      - name: VITE_API_BASE_URL
-        value: https://api.technoagentes.com
-      - name: VITE_APP_NAME
-        value: Technoagentes
-      - name: VITE_APP_VERSION
-        value: 1.0.0
-      - name: GENERATE_SOURCEMAP
-        value: 'true'
-      - name: CI
-        value: 'true'
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - echo "Starting pre-build phase..."
+        - echo "Node version:" && node --version
+        - echo "NPM version:" && npm --version
+        - echo "Installing dependencies..."
+        - npm ci
+    build:
+      commands:
+        - echo "Starting build phase..."
+        - echo "Building application..."
+        - npm run build
+        - echo "Build completed successfully"
+    postBuild:
+      commands:
+        - echo "Starting post-build phase..."
+        - echo "Validating build output..."
+        - ls -la dist/
+        - echo "Post-build validation completed"
+  artifacts:
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*

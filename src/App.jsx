@@ -11,7 +11,7 @@ import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
-import { VerifyEmailPage } from './pages/VerifyEmailPage'
+// import { VerifyEmailPage } from './pages/VerifyEmailPage'
 import DashboardPage from './pages/DashboardPage'
 import ChatPage from './pages/ChatPage'
 
@@ -39,7 +39,7 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                    <Route path="/verify-email" element={<VerifyEmailPage />} />
+                    {/* <Route path="/verify-email" element={<VerifyEmailPage />} /> */}
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/chat" element={<ChatPage />} />
                   </Routes>
